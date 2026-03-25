@@ -1,0 +1,8 @@
+{
+  "name": "ak-store-root",
+  "private": true,
+  "scripts": {
+    "install": "cd front-web && npm install",
+    "build": "cd front-web && npm run build"
+  }
+}
