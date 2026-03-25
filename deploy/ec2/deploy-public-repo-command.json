@@ -1,0 +1,28 @@
+{
+  "DocumentName": "AWS-RunShellScript",
+  "InstanceIds": ["i-0ae28985e00faebdd"],
+  "Comment": "Clone public repo and deploy AK Store",
+  "Parameters": {
+    "commands": [
+      "set -euo pipefail",
+      "if id -u ec2-user >/dev/null 2>&1; then APP_USER=ec2-user; elif id -u ubuntu >/dev/null 2>&1; then APP_USER=ubuntu; else APP_USER=$(id -un); fi",
+      "sudo rm -rf /opt/ak-store",
+      "sudo mkdir -p /opt/ak-store",
+      "sudo chown $APP_USER:$APP_USER /opt/ak-store",
+      "sudo -u $APP_USER git clone --branch main https://github.com/kaushik943/store_aws.git /opt/ak-store",
+      "cat > /tmp/ak-store.env <<'EOF'",
+      "AWS_REGION=ap-south-1",
+      "UPLOADS_BUCKET=ak-store-api-prod-007222077181-uploads",
+      "SECRET_KEY=replace-this-with-a-new-long-random-secret-for-ec2",
+      "SMTP_EMAIL=akstorerxl@gmail.com",
+      "SMTP_PASSWORD=hvwm rwxi cwoo wutn",
+      "CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,https://ak-store-rxl.vercel.app,http://65.1.105.90",
+      "EOF",
+      "sudo mv /tmp/ak-store.env /opt/ak-store/.env",
+      "sudo chmod 600 /opt/ak-store/.env",
+      "sudo chmod +x /opt/ak-store/deploy/ec2/*.sh",
+      "cd /opt/ak-store && sudo APP_USER=$APP_USER ./deploy/ec2/setup-server.sh",
+      "cd /opt/ak-store && sudo APP_USER=$APP_USER ./deploy/ec2/deploy-backend.sh"
+    ]
+  }
+}

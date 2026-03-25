@@ -1,0 +1,12 @@
+{
+  "DocumentName": "AWS-RunShellScript",
+  "InstanceIds": ["i-0ae28985e00faebdd"],
+  "Comment": "AK Store health check",
+  "Parameters": {
+    "commands": [
+      "curl -s http://127.0.0.1:8000/api/health",
+      "echo ---",
+      "curl -s http://127.0.0.1/api/health"
+    ]
+  }
+}

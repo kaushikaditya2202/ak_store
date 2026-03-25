@@ -1,0 +1,17 @@
+{
+  "DocumentName": "AWS-RunShellScript",
+  "InstanceIds": ["i-0ae28985e00faebdd"],
+  "Comment": "Fix env permissions and restart AK Store",
+  "Parameters": {
+    "commands": [
+      "set -euo pipefail",
+      "if id -u ec2-user >/dev/null 2>&1; then APP_USER=ec2-user; elif id -u ubuntu >/dev/null 2>&1; then APP_USER=ubuntu; else APP_USER=$(id -un); fi",
+      "sudo chown $APP_USER:$APP_USER /opt/ak-store/.env",
+      "sudo chmod 640 /opt/ak-store/.env",
+      "sudo systemctl restart ak-store-api",
+      "sleep 3",
+      "systemctl is-active ak-store-api",
+      "curl -s http://127.0.0.1:8000/api/health"
+    ]
+  }
+}

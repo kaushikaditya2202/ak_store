@@ -1,0 +1,15 @@
+[Unit]
+Description=AK Store FastAPI backend
+After=network.target
+
+[Service]
+User=__APP_USER__
+Group=__APP_GROUP__
+WorkingDirectory=/opt/ak-store
+EnvironmentFile=/opt/ak-store/.env
+ExecStart=/opt/ak-store/venv/bin/gunicorn backend.main:app --workers __WORKERS__ --worker-class uvicorn.workers.UvicornWorker --bind 127.0.0.1:8000 --timeout 120
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

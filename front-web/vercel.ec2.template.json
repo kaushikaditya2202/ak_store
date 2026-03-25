@@ -1,0 +1,20 @@
+{
+  "framework": "vite",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://YOUR_EC2_PUBLIC_HOST/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "http://YOUR_EC2_PUBLIC_HOST/uploads/:path*"
+    },
+    {
+      "source": "/((?!api/|uploads/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

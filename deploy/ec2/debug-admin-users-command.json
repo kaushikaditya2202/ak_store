@@ -1,0 +1,16 @@
+{
+  "DocumentName": "AWS-RunShellScript",
+  "InstanceIds": ["i-0ae28985e00faebdd"],
+  "Comment": "Debug /api/admin/users 500",
+  "Parameters": {
+    "commands": [
+      "set -e",
+      "echo '--- systemctl ---'",
+      "systemctl is-active ak-store-api || true",
+      "systemctl is-enabled ak-store-api || true",
+      "systemctl show -p ExecMainStatus -p ExecMainCode -p ExecMainPID ak-store-api || true",
+      "echo '--- journalctl (last 200) ---'",
+      "sudo journalctl -u ak-store-api -n 200 --no-pager --output cat || true"
+    ]
+  }
+}

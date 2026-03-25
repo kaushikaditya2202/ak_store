@@ -1,0 +1,11 @@
+{
+  "DocumentName": "AWS-RunShellScript",
+  "InstanceIds": ["i-0ae28985e00faebdd"],
+  "Comment": "Test OTP email via SES",
+  "Parameters": {
+    "commands": [
+      "cd /opt/ak-store",
+      "./venv/bin/python -c \"from backend.main import send_otp_email; print(send_otp_email('akstorerxl@gmail.com', '123456'))\""
+    ]
+  }
+}

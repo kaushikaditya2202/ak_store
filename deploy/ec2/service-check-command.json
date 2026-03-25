@@ -1,0 +1,12 @@
+{
+  "DocumentName": "AWS-RunShellScript",
+  "InstanceIds": ["i-0ae28985e00faebdd"],
+  "Comment": "AK Store service check",
+  "Parameters": {
+    "commands": [
+      "systemctl is-active ak-store-api",
+      "systemctl is-enabled ak-store-api",
+      "journalctl -u ak-store-api -n 20 --no-pager --output cat"
+    ]
+  }
+}

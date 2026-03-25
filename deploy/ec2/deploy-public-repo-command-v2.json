@@ -1,0 +1,34 @@
+{
+  "DocumentName": "AWS-RunShellScript",
+  "InstanceIds": ["i-0ae28985e00faebdd"],
+  "Comment": "Clone public repo and deploy AK Store without curl conflict",
+  "Parameters": {
+    "commands": [
+      "set -euo pipefail",
+      "if id -u ec2-user >/dev/null 2>&1; then APP_USER=ec2-user; elif id -u ubuntu >/dev/null 2>&1; then APP_USER=ubuntu; else APP_USER=$(id -un); fi",
+      "sudo rm -rf /opt/ak-store",
+      "sudo mkdir -p /opt/ak-store",
+      "sudo chown $APP_USER:$APP_USER /opt/ak-store",
+      "sudo -u $APP_USER git clone --branch main https://github.com/kaushik943/store_aws.git /opt/ak-store",
+      "sed -i 's/ nginx curl/ nginx/g; s/python3-pip nginx curl/python3-pip nginx/g' /opt/ak-store/deploy/ec2/setup-server.sh",
+      "cat > /tmp/ak-store.env <<'EOF'",
+      "AWS_REGION=ap-south-1",
+      "UPLOADS_BUCKET=ak-store-api-prod-007222077181-uploads",
+      "SECRET_KEY=replace-this-with-a-new-long-random-secret-for-ec2",
+      "SMTP_HOST=smtp.gmail.com",
+      "SMTP_PORT=587",
+      "SMTP_USE_SSL=false",
+      "SMTP_EMAIL=akstorerxl@gmail.com",
+      "SMTP_PASSWORD=hvwm rwxi cwoo wutn",
+      "SMTP_FROM_EMAIL=akstorerxl@gmail.com",
+      "CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,https://ak-store-rxl.vercel.app,http://65.1.105.90",
+      "EOF",
+      "sudo mv /tmp/ak-store.env /opt/ak-store/.env",
+      "sudo chown $APP_USER:$APP_USER /opt/ak-store/.env",
+      "sudo chmod 640 /opt/ak-store/.env",
+      "sudo chmod +x /opt/ak-store/deploy/ec2/*.sh",
+      "cd /opt/ak-store && sudo APP_USER=$APP_USER ./deploy/ec2/setup-server.sh",
+      "cd /opt/ak-store && sudo APP_USER=$APP_USER ./deploy/ec2/deploy-backend.sh"
+    ]
+  }
+}
